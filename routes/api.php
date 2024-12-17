@@ -9,4 +9,5 @@ use App\Http\Controllers\OrderController;
 
 Route::get('/tables',[TableController::class, 'index']);
 Route::post('/bookings',[BookingController::class, 'store']);
+Route::post('/orders',[OrderController::class, 'store']);
 Route::get('/orders',[OrderController::class, 'index']);

@@ -30,7 +30,10 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response()->json([
+            'data' => 'Data',
+            'message' => 'Resource created successfully'],
+            201);
     }
 
     /**
