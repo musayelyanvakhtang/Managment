@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class BookingController extends Controller
 {
@@ -26,12 +28,13 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBookingRequest $request)
     {
+        $data = $request->validated();
         return response()->json([
-            'data' => 'Data',
-            'message' => 'Resource created successfully'],
-            201);
+            'data' => $data,
+            'message' => 'Table booked successfully'],
+        Response::HTTP_CREATED);
     }
 
     /**

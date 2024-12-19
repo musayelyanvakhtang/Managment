@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('table_id')->constrained('tables');
+            $table->string('customer_name');
+            $table->timestamp('booking_time');
             $table->timestamps();
         });
     }
