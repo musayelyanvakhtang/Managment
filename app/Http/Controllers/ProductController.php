@@ -2,17 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Services\ProductService;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
+    protected $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $dataProducts = $this->productService->getAllProducts();
+        return response()->view("products", compact('dataProducts'),
+            Response::HTTP_OK);
     }
 
     /**
@@ -26,9 +38,21 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $data = $request->validated();
+        try {
+            $this->productService->createNewProduct($data);
+            return response()->json([
+                'message' => 'Product created successfully'],
+                Response::HTTP_CREATED);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Product creating process failed'],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        }
     }
 
     /**

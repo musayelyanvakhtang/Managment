@@ -1,0 +1,152 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cafe Management API",
+        "description": "API documentation for cafe management.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api/tables",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/api/booking": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "To book a table",
+                "description": "To book a table in the system",
+                "operationId": "077614f000582fb3bfada3650bf02077",
+                "requestBody": {
+                    "description": "Booking details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "table_id": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "customer_name": {
+                                        "type": "string",
+                                        "example": "Jhon"
+                                    },
+                                    "booking_time": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-10-12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Table booked successfully."
+                    },
+                    "422": {
+                        "description": "Table booking process failed"
+                    }
+                }
+            }
+        },
+        "api/tables": {
+            "get": {
+                "tags": [
+                    "Tables"
+                ],
+                "summary": "Retrieve a list of tables",
+                "description": "Show tables and their statuses",
+                "operationId": "c8ef94d0e72092d2f05aabd031750ad1",
+                "responses": {
+                    "200": {
+                        "description": "Successfuly retrieved list of tables",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "status": {
+                                                "type": "boolean",
+                                                "example": "true"
+                                            },
+                                            "campacity": {
+                                                "type": "string",
+                                                "example": "8"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tables"
+                ],
+                "summary": "Creates a new table",
+                "description": "Creates a new table in the system.",
+                "operationId": "6a054d4758d0370d1236e7c565e758fc",
+                "requestBody": {
+                    "description": "Table details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "capacity": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Table created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Bookings",
+            "description": "Bookings"
+        },
+        {
+            "name": "Tables",
+            "description": "Tables"
+        }
+    ]
+}

@@ -7,7 +7,10 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\OrderController;
 
 
-Route::get('/tables',[TableController::class, 'index']);
-Route::post('/bookings',[BookingController::class, 'store']);
-Route::post('/orders',[OrderController::class, 'store']);
-Route::get('/orders',[OrderController::class, 'index']);
+Route::resource('/tables', TableController::class);
+
+
+Route::post('/bookings', [BookingController::class, 'store']);
+Route::post('/orders', [OrderController::class, 'store']);
+Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/test', [BookingController::class, 'index']);

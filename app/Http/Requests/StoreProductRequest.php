@@ -4,8 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-
-class StoreBookingRequest extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,13 +19,11 @@ class StoreBookingRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-
     public function rules(): array
     {
         return [
-            'table_id' => 'required',
-            'customer_name' => 'required|string|max:255',
-            'booking_time' => 'required|date|after_or_equal:now',
+            "name" => "required|string",
+            "price" => "required",
         ];
     }
 }

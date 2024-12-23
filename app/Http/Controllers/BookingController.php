@@ -6,15 +6,35 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\BookingService;
+use App\Services\TestSingleton;
+
 
 class BookingController extends Controller
 {
+    protected $bookingService;
+
+    public function __construct(BookingService $bookingService)
+    {
+        $this->bookingService = $bookingService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TestSingleton $singleton)
     {
-        //
+        $initialValue = $singleton->getTestConfig();
+
+        $singleton->incrementTestConfig();
+
+        $updatedValue = $singleton->getTestConfig();
+        $newSingleton = $singleton->incrementTestConfig();
+        return response()->json([
+            'initial_value' => $initialValue,
+            'updated_value' => $updatedValue,
+            'new_value' => $newSingleton,
+        ]);
     }
 
     /**
@@ -28,13 +48,47 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    /**
+     * @OA\Post(
+     *     path="/api/booking",
+     *     tags={"Bookings"},
+     *     summary="To book a table",
+     *     description="To book a table in the system",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Booking details",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="table_id",type="integer",example=10),
+     *             @OA\Property (property="customer_name",type="string",example="Jhon"),
+     *             @OA\Property (property="booking_time",type="date",example="2026-10-12"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Table booked successfully.",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Table booking process failed",
+     *     )
+     * )
+     */
     public function store(StoreBookingRequest $request)
     {
         $data = $request->validated();
-        return response()->json([
-            'data' => $data,
-            'message' => 'Table booked successfully'],
-        Response::HTTP_CREATED);
+        try {
+            $this->bookingService->store($data);
+            return response()->json([
+                'message' => 'Table booked successfully'],
+                Response::HTTP_CREATED);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Table booking process failed'],
+                Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        }
     }
 
     /**
